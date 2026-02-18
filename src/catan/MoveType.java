@@ -1,0 +1,14 @@
+package catan;
+
+public enum MoveType {
+    PASS,
+    BUILD_ROAD,
+    BUILD_SETTLEMENT,
+    BUILD_CITY,
+    OFFER_TRADE,
+    ACCEPT_TRADE,
+    REFUSE_TRADE,
+    COUNTER_TRADE,
+    PLAY_DEVELOPMENT,
+    MOVE_ROBBER
+}
