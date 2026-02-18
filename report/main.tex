@@ -1,55 +1,16 @@
-\documentclass{article}
+\documentclass[12pt,table,dvipsnames]{article}
 
-\usepackage[table]{xcolor} % Must come before packages that load xcolor
+\input{meta/preamble}
+\input{config}
 
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{array}
-\usepackage{booktabs}
-% \usepackage{capt-of}
-\usepackage{color}
-\usepackage{enumerate}
-\usepackage{graphics}
-\usepackage{graphicx}
-\usepackage{listings}
-\usepackage{mdwlist}
-\usepackage{multicol}
-% \usepackage{pgfplots}
-
-\usepackage[normalem]{ulem}
-\usepackage[margin=1in]{geometry}
-
-
-\usepackage{hyperref} % Must be loaded last
-
-\setcounter{secnumdepth}{0} 
-
-% Easily highlight answers in math/physics homework
-% \newcommand{\ans}[1]{\textcolor{blue}{#1}}
-
-% Paragraph formatting
-\setlength{\parskip}{1ex}
-
-% \setlength{\parindent}{0pt}\makeatletter
-
-% Letter subsections (instead of having 1.1, 1.2, etc)
-% \renewcommand{\thesubsection}{\Alph{subsection}.}
 \begin{document}
 
-\title{SFWRENG 3SO3 Assignment \#1}
-\author{Om Patel, Mayowa Adesanya, Soutrik Guhathakurtha}
-\date{February 18, 2026}
-\maketitle
-\newpage
-\tableofcontents
+\title{\doctitle}
+\pagenumbering{arabic}
+\input{meta/title}
 
 \newpage
 
-\section{Test}
-
-\subsection{test1}
-
-
+\input{content}
 
 \end{document}
