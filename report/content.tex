@@ -3,4 +3,133 @@
 
 \section{Task 2}
 
-\section{...}
+\section{Task 3: Testing parts of large systems}
+
+\subsection{(a)}
+The agent's behaviour can be decoupled using \textbf{Dependency Injection} and \textbf{Test Doubles} (specifically, stubs/fakes) behind the provided \texttt{CatanAgent} interface.
+
+The core engine should solely rely on:
+\begin{itemize}
+    \item game rules/state transitions, and
+    \item the contract \texttt{CatanAgent} (inputs/outputs)
+\end{itemize}
+
+This allows testing the core module with deterministic, pre-scripted agent choices, so tests focus on legality checks and rule execution rather than RL quality. It also makes later replacement easy: random, heuristic, RL, or human-network agents can all plug in without changing core logic.
+
+\subsection{(b)}
+A minimal implementation of the design is implemented in \texttt{src/catan}:
+\begin{itemize}
+    \item \texttt{CatanAgent.java}: given interface (core dependency boundary).
+    \item \texttt{AgentPolicy.java}: behavior strategy abstraction used for composition.
+    \item \texttt{PolicyBackedCatanAgent.java}: adapter that implements \texttt{CatanAgent} by delegating to an injected policy.
+    \item \texttt{ScriptedPolicy.java}: deterministic test double with queued moves.
+    \item \texttt{CatanCoreEngine.java}: core loop; validates move legality and applies a safe fallback (\texttt{PASS}) if illegal.
+    \item \texttt{GameState.java}, \texttt{Move.java}, enums: minimal domain model.
+    \item \texttt{Demo.java}: runs four agents to show separation in practice.
+\end{itemize}
+
+Key point: the engine never knows whether a move came from a stub, heuristic, or RL policy. That behavior is injected.
+
+\subsection{(c)}
+A common solution from a developer unfamiliar with these techniques is to place decision logic directly inside the engine, e.g., \texttt{if(agentType == RL) ... else ...}, or to hardcode random/heuristic behavior in core classes.
+
+Problems with that approach and benefits of mine:
+\begin{itemize}
+    \item \textbf{High coupling}: rule code and behavior code become tangled. In the current design, the core only sees \texttt{CatanAgent}.
+    \item \textbf{Poor testability}: non-deterministic behavior makes core tests flaky. Scripted policies make tests reproducible.
+    \item \textbf{Open/Closed violation}: every new agent type forces edits to core logic. With injection, new policies are added without touching engine code.
+    \item \textbf{Higher maintenance risk}: bugs in learning code can destabilize rule validation. Separation keeps failures localized and easier to debug.
+\end{itemize}
+
+\subsection{(d)}
+I would communicate to:
+\begin{itemize}
+    \item technical peers (design session + code walkthrough),
+    \item tech lead/manager (delivery and risk argument), and
+    \item QA/testing members (how deterministic doubles improve test quality).
+\end{itemize}
+
+How and what I would communicate:
+\begin{itemize}
+    \item short architecture note (problem, decision, tradeoffs, examples),
+    \item live demo with the implemented files showing swappable policies,
+    \item test strategy showing deterministic agent stubs for core-rule tests,
+    \item team conventions: ``core depends on interfaces, behavior injected''.
+\end{itemize}
+
+Expectations:
+\begin{itemize}
+    \item shared vocabulary (DI, test double, strategy),
+    \item more stable and faster tests,
+    \item easier onboarding and safer extension to RL agents.
+\end{itemize}
+
+With respect to the CEAB engineering practice: this reflects disciplined design, verification mindset, communication, professionalism, and continuous process improvement. It applies software engineering knowledge to reduce risk while improving quality and maintainability.
+
+\section{Task 4: Test-Driven Development(TDD)}
+\subsection{(a)}
+The following small initial unit test suite for \texttt{divide()} can be used to verify basic functionality and sign semantics:
+\begin{itemize}
+    \item \texttt{testDividePositiveNumbers}: verifies normal behaviour (\texttt{5.0 / 2.0 = 2.5})
+    \item \texttt{testDivideNegativeByPositive}: verifies sign semantics (\texttt{-9.0 / 3.0 = -3.0})
+\end{itemize}
+
+These tests are implemented in \texttt{src/calculator/CalculatorTddTest.java}. They define the first iteration's target behaviour before implementing full edge-case handling.
+
+\subsection{(b)}
+The basic functionality has been implemented in \texttt{src/calculator/Calculator.java} until the tests passed:
+\begin{itemize}
+    \item method \texttt{divide(double numerator, double denominator)}
+    \item returns \texttt{numerator / denominator} for valid normal inputs
+\end{itemize}
+
+The tests were then executed from the command line and were confirmed to pass.
+
+\subsection{(c)}
+After iteration 1, the functionality is not complete. The first tests only validate nominal arithmetic behaviour and one sign case. Missing behaviour becomes obvious when compared with code one would write non-TDD in one pass, where developers often immediately think about exceptional cases.
+
+Important missing behaviours:
+\begin{itemize}
+    \item division by zero (\texttt{0.0} and \texttt{-0.0})
+    \item invalid floating input such as \texttt{NaN}
+    \item explicit and documented error semantics (which exception and why)
+\end{itemize}
+
+TDD made this visible quickly: once minimal tests pass, the next step is to identify what behaviour is still unspecified. If a behaviour is not in tests, it is effectively not part of the contract yet.
+
+\subsection{(d)}
+The test suite was then expanded by adding a second TDD iteration focused on edge cases:
+\begin{itemize}
+    \item \texttt{testDivideByZeroThrows}: expects \texttt{ArithmeticException} for denominator \texttt{0.0}
+    \item \texttt{testDivideNegativeZeroThrows}: expects \texttt{ArithmeticException} for denominator \texttt{-0.0}
+    \item \texttt{testDivideNaNThrows}: expects \texttt{IllegalArgumentException} if an argument is \texttt{NaN}
+\end{itemize}
+
+These tests are also in \texttt{src/calculator/CalculatorTddTest.java}. They extend the contract from ``works on normal numbers'' to ``fails safely on invalid input.''
+
+\subsection{(e)}
+The \texttt{divide()} method was then updated to satisfy the expanded suite:
+\begin{itemize}
+    \item validate inputs and reject \texttt{NaN} with \texttt{IllegalArgumentException}
+    \item reject zero denominator (including \texttt{-0.0}) with \texttt{ArithmeticException}
+    \item keep normal arithmetic behaviour unchanged
+\end{itemize}
+
+This final behaviour is implemented in \texttt{src/calculator/Calculator.java}.
+
+\subsection{(f)}
+I would use TDD in contexts where correctness and regression safety are important: utility/domain logic, business rules, parsers, and modules with clear input/output contracts.
+
+I would use it less strictly for heavy UI prototyping or exploratory tasks where requirements change rapidly by design.
+
+Element I liked most:
+\begin{itemize}
+    \item it forces explicit behaviour contracts and prevents overbuilding
+\end{itemize}
+
+Hardest element to manage:
+\begin{itemize}
+    \item selecting the right test granularity and not overfitting implementation details while still covering edge cases
+\end{itemize}
+
+Overall, this exercise showed the TDD cycle clearly across two iterations: start with minimal behaviour, then expand the contract with edge cases and update implementation accordingly.

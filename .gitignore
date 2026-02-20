@@ -320,8 +320,8 @@ TSWLatexianTemp*
 # xwatermark package
 *.xwm
 
-# catan compile files
-src/catan/**/*.class
+# Java compile files under src
+src/**/*.class
 
 # REVTeX puts footnotes in the bibliography by default, unless the nofootinbib
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
