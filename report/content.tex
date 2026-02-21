@@ -1,7 +1,142 @@
 \section{Task 1}
-\id{Elaborate on each task in a separate section. Delete these comments in your final report.}
+
+\subsection{(a)}
+\textbf{Prompt + generative-AI response (three types of tests).}
+\textbf{Prompt used (ChatGPT):} ``List three types of tests you would run for an action-adventure game set in post-apocalyptic McMaster University with up to 8 players (co-op + competitive), releasing on PS5, Xbox Series X, Nintendo Switch, and Sega Genesis (16-bit). Keep it practical and explain each test type briefly.''
+
+\textbf{Response from ChatGPT:}
+\begin{enumerate}
+    \item \textbf{Platform Compatibility / Certification Testing} \\
+    Verify the game behaves correctly on each platform's hardware, OS, controllers, save system, and platform rules. Special focus for Sega Genesis: memory limits, sprite/tile constraints, audio channels, input latency, and ensuring the game still fails gracefully (e.g., sprite overflow handling) rather than crashing.
+
+    \item \textbf{Multiplayer / Networking \& Sync Testing} \\
+    Test 1--8 players across co-op and competitive modes for state synchronization (positions, damage, AI states), latency tolerance, reconnect behavior, matchmaking/lobbies, host migration (if used), and ensuring no desyncs or soft-locks during chaotic encounters.
+
+    \item \textbf{Core Gameplay Functional + Regression Testing} \\
+    Validate core loops: movement/collision, combat, enemy AI behaviors (zombies/professors/deans/squirrels), quest/progression triggers, inventory, checkpoints, save/load, and UI. Add regression tests to ensure fixes do not break previously working mechanics.
+\end{enumerate}
+
+\subsection{(b)}
+\textbf{Two poor/unclear things in (a), and why they are unhelpful.}
+\begin{itemize}
+    \item \textbf{Too broad to be directly actionable.} The test types do not specify concrete pass/fail criteria (for example, what exact result proves sync is correct, or what graceful failure means on Genesis), so it is difficult to convert them into immediate executable test cases.
+    \item \textbf{Genesis is mentioned but not operationalized.} The response correctly notes memory and sprite constraints, but it does not define test setup details (scenes, sprite counts, resource budgets, acceptable failure behavior), making the highest-risk platform guidance too abstract.
+\end{itemize}
+
+\subsection{(c)}
+\textbf{Two good/helpful things in (a), and why they are helpful.}
+\begin{itemize}
+    \item \textbf{It targets the biggest risk areas for this game.} Cross-platform behavior, multiplayer synchronization, and core gameplay stability are typically where severe and costly defects appear, so these categories provide a strong high-level strategy.
+    \item \textbf{It recognizes Sega Genesis as a special case.} Highlighting 16-bit constraints is useful because it makes clear that test design cannot treat all platforms identically and requires platform-specific validation priorities.
+\end{itemize}
+
+\subsection{(d)}
+\textbf{Three specific tests, plus why these are preferred.}
+\begin{enumerate}
+    \item \textbf{Genesis worst-case sprite/tile budget scenario.} \\
+    \textit{Setup:} Execute a stress scene on Sega Genesis with 8 enemies, player combat effects, and UI elements simultaneously visible to push sprite limits. \\
+    \textit{Pass criteria:} No crash or soft-lock occurs, degradation is predictable (e.g., controlled sprite flicker or effect culling), and controls remain responsive.
+
+    \item \textbf{8-player desync/disconnect robustness.} \\
+    \textit{Setup:} Run an 8-player session, trigger a high-intensity combat sequence, force one player to disconnect mid-combat, then reconnect after 30--60 seconds. \\
+    \textit{Pass criteria:} Ongoing players continue without disruption, and the returning player's position/HP/inventory/objectives match the authoritative state without rubber-banding or broken quest progression.
+
+    \item \textbf{Save/load state integrity during combat.} \\
+    \textit{Setup:} During an encounter, save at a checkpoint (or manual save), immediately reload, and inspect the full world state. \\
+    \textit{Pass criteria:} Player stats, ammo, enemy states, quest flags, and location restore correctly with no duplication/loss and no incorrect progression reset.
+\end{enumerate}
+
+These tests are preferred because each one has a clear setup and measurable pass/fail outcome rather than only broad categories. They also directly target the highest-risk areas in this scenario: Genesis hardware constraints, multiplayer instability, and progression/state integrity.
 
 \section{Task 2}
+
+\subsection{Program 1: \texttt{findLast}}
+\subsubsection{(a)}
+\textbf{Fault + precise fix.}
+\textbf{Fault:} The loop stops at \texttt{i > 0}, so index \texttt{0} is never checked. \\
+\textbf{Fix:} Change the loop condition to include index \texttt{0}: \texttt{for (int i = x.length - 1; i >= 0; i--)}.
+
+\subsubsection{(b)}
+\textbf{Test that does not execute the fault.}
+Use \texttt{x = null}, \texttt{y = any value}. This throws \texttt{NullPointerException} at \texttt{x.length}, so the loop condition is not evaluated.
+
+\subsubsection{(c)}
+\textbf{Test that executes the fault but no error state.}
+Example: \texttt{x = [2,3,5], y = 3, expected = 1}. The faulty condition exists, but the method returns at index \texttt{1}, so index \texttt{0} is not needed and behavior matches the specification.
+
+\subsubsection{(d)}
+\textbf{Error state but not failure.}
+Example: \texttt{x = [9,3,5], y = 2, expected = -1}. The error state occurs when \texttt{i} becomes \texttt{0} and \texttt{i > 0} evaluates false, causing loop exit even though the correct version would still execute one more iteration; output remains \texttt{-1}, so there is no failure.
+
+\subsubsection{(e)}
+\textbf{First error state for the given failing test.}
+Given \texttt{x = [2,3,5], y = 2} (expected \texttt{0}), the first error state occurs when \texttt{i} reaches \texttt{0} and \texttt{i > 0} evaluates false, so control exits the loop and returns \texttt{-1} without checking \texttt{x[0]}.
+
+\subsection{Program 2: \texttt{lastZero}}
+\subsubsection{(a)}
+\textbf{Fault + precise fix.}
+\textbf{Fault:} The method returns the first zero because it scans left-to-right and returns immediately. \\
+\textbf{Fix:} Scan from the end: \texttt{for (int i = x.length - 1; i >= 0; i--) \{ if (x[i] == 0) return i; \} return -1;}.
+
+\subsubsection{(b)}
+\textbf{Test that does not execute the fault.}
+Example: \texttt{x = [1,2,3], expected = -1}. The faulty \texttt{return i;} inside the \texttt{if} is never executed because no zero exists.
+
+\subsubsection{(c)}
+\textbf{Test that executes the fault but no error state.}
+Example: \texttt{x = [1,2,0], expected = 2}. The method returns at index \texttt{2}, which is genuinely the last zero, so no incorrect state is reached.
+
+\subsubsection{(d)}
+\textbf{Error state but not failure.}
+Example: \texttt{x = [1,0,2], expected = 1}. At \texttt{i = 1}, control returns immediately without checking later indices, which is a control-state error for a \texttt{find last} computation; because no later zero exists, the returned value is still correct.
+
+\subsubsection{(e)}
+\textbf{First error state for the given failing test.}
+Given \texttt{x = [0,1,0]} (expected \texttt{2}), the first error state is at \texttt{i = 0} when \texttt{x[0] == 0} causes immediate \texttt{return 0}, committing before checking later indices where another zero exists.
+
+\subsection{Program 3: \texttt{countPositive}}
+\subsubsection{(a)}
+\textbf{Fault + precise fix.}
+\textbf{Fault:} The condition \texttt{x[i] >= 0} counts zero as positive. \\
+\textbf{Fix:} Use strict positivity: \texttt{if (x[i] > 0) \{ count++; \}}.
+
+\subsubsection{(b)}
+\textbf{Test that does not execute the fault.}
+Example: \texttt{x = [], expected = 0}. The loop body does not run, so \texttt{x[i] >= 0} is never executed.
+
+\subsubsection{(c)}
+\textbf{Test that executes the fault but no error state.}
+Example: \texttt{x = [-4,2,5], expected = 2}. No zeros appear, so \texttt{>= 0} behaves the same as \texttt{> 0} for all elements in this test.
+
+\subsubsection{(d)}
+\textbf{Error state but not failure.}
+Not possible. If the fault is activated (a \texttt{0} appears), \texttt{count} increments when it should not, which changes the returned value and therefore causes a failure.
+
+\subsubsection{(e)}
+\textbf{First error state for the given failing test.}
+Given \texttt{x = [-4,2,0,2]} (expected \texttt{2}), the first error state occurs at index \texttt{i = 2}: \texttt{x[i] >= 0} is true for \texttt{0}, so \texttt{count} becomes \texttt{2} when it should still be \texttt{1}.
+
+\subsection{Program 4: \texttt{oddOrPos}}
+\subsubsection{(a)}
+\textbf{Fault + precise fix.}
+\textbf{Fault:} The check \texttt{x[i] \% 2 == 1} fails for negative odd numbers in Java (e.g., \texttt{-3 \% 2 == -1}). \\
+\textbf{Fix:} Use \texttt{x[i] \% 2 != 0 || x[i] > 0}.
+
+\subsubsection{(b)}
+\textbf{Test that does not execute the fault.}
+Example: \texttt{x = [], expected = 0}. The loop body does not execute, so the faulty odd-check expression is never evaluated.
+
+\subsubsection{(c)}
+\textbf{Test that executes the fault but no error state.}
+Example: \texttt{x = [-2,0,1,4], expected = 2}. No negative odd values appear, so behavior stays consistent with the specification.
+
+\subsubsection{(d)}
+\textbf{Error state but not failure.}
+Not possible. When a negative odd value appears, the method fails to count it, reducing \texttt{count}; that incorrect internal state directly propagates to the returned value.
+
+\subsubsection{(e)}
+\textbf{First error state for the given failing test.}
+Given \texttt{x = [-3,-2,0,1,4]} (expected \texttt{3}), the first error state occurs at \texttt{i = 0}: \texttt{-3} should be counted as odd, but \texttt{-3 \% 2 == 1} is false, so \texttt{count} remains \texttt{0} when it should be \texttt{1}.
 
 \section{Task 3: Testing parts of large systems}
 
