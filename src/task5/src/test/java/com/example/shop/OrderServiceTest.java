@@ -10,81 +10,81 @@ class OrderServiceTest {
     private static final double EPSILON = 1e-9;
     private final OrderService orderService = new OrderService();
 
-    @Test
-    void processOrder_cryptoPayment_returnsZeroAndCancelsOrder() {
-        Order order = createSampleOrder();
+   @Test
+   void processOrder_cryptoPayment_returnsZeroAndCancelsOrder() {
+       Order order = createSampleOrder();
 
-        double total = orderService.processOrder(order, null, "crypto");
+       double total = orderService.processOrder(order, null, "crypto");
 
-        assertEquals(0.0, total, EPSILON);
-        assertEquals(OrderStatus.CANCELLED, order.getStatus());
-    }
+       assertEquals(0.0, total, EPSILON);
+       assertEquals(OrderStatus.CANCELLED, order.getStatus());
+   }
+//
+   @Test
+   void processOrder_nullPayment_returnsZeroAndCancelsOrder() {
+       Order order = createSampleOrder();
 
-    @Test
-    void processOrder_nullPayment_returnsZeroAndCancelsOrder() {
-        Order order = createSampleOrder();
+       double total = orderService.processOrder(order, null, null);
 
-        double total = orderService.processOrder(order, null, null);
+       assertEquals(0.0, total, EPSILON);
+       assertEquals(OrderStatus.CANCELLED, order.getStatus());
+   }
 
-        assertEquals(0.0, total, EPSILON);
-        assertEquals(OrderStatus.CANCELLED, order.getStatus());
-    }
+   @Test
+   void processOrder_unknownPayment_throwsAndOrderRemainsCreated() {
+       Order order = createSampleOrder();
 
-    @Test
-    void processOrder_unknownPayment_throwsAndOrderRemainsCreated() {
-        Order order = createSampleOrder();
+       assertThrows(UnsupportedOperationException.class, () -> orderService.processOrder(order, null, "cash"));
+       assertEquals(OrderStatus.CREATED, order.getStatus());
+   }
 
-        assertThrows(UnsupportedOperationException.class, () -> orderService.processOrder(order, null, "cash"));
-        assertEquals(OrderStatus.CREATED, order.getStatus());
-    }
+   @Test
+   void processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid() {
+       Order order = createSampleOrder();
 
-    @Test
-    void processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid() {
-        Order order = createSampleOrder();
+       double total = orderService.processOrder(order, null, "card");
 
-        double total = orderService.processOrder(order, null, "card");
+       assertEquals(120.0, total, EPSILON);
+       assertEquals(OrderStatus.PAID, order.getStatus());
+   }
+//
+   @Test
+   void processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid() {
+       Order order = createSampleOrder();
 
-        assertEquals(120.0, total, EPSILON);
-        assertEquals(OrderStatus.PAID, order.getStatus());
-    }
+       double total = orderService.processOrder(order, "STUDENT10", "card");
 
-    @Test
-    void processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid() {
-        Order order = createSampleOrder();
+       assertEquals(108.0, total, EPSILON);
+       assertEquals(OrderStatus.PAID, order.getStatus());
+   }
 
-        double total = orderService.processOrder(order, "STUDENT10", "card");
+   @Test
+   void processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid() {
+       Order order = createSampleOrder();
 
-        assertEquals(108.0, total, EPSILON);
-        assertEquals(OrderStatus.PAID, order.getStatus());
-    }
+       double total = orderService.processOrder(order, "BLACKFRIDAY", "paypal");
 
-    @Test
-    void processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid() {
-        Order order = createSampleOrder();
+       assertEquals(84.0, total, EPSILON);
+       assertEquals(OrderStatus.PAID, order.getStatus());
+   }
 
-        double total = orderService.processOrder(order, "BLACKFRIDAY", "paypal");
+   @Test
+   void processOrder_invalidDiscount_throwsAndOrderRemainsCreated() {
+       Order order = createSampleOrder();
 
-        assertEquals(84.0, total, EPSILON);
-        assertEquals(OrderStatus.PAID, order.getStatus());
-    }
+       assertThrows(IllegalArgumentException.class, () -> orderService.processOrder(order, "INVALID", "card"));
+       assertEquals(OrderStatus.CREATED, order.getStatus());
+   }
 
-    @Test
-    void processOrder_invalidDiscount_throwsAndOrderRemainsCreated() {
-        Order order = createSampleOrder();
+   @Test
+   void processOrder_emptyOrderWithValidPayment_returnsZeroAndMarksPaid() {
+       Order order = new Order();
 
-        assertThrows(IllegalArgumentException.class, () -> orderService.processOrder(order, "INVALID", "card"));
-        assertEquals(OrderStatus.CREATED, order.getStatus());
-    }
+       double total = orderService.processOrder(order, null, "card");
 
-    @Test
-    void processOrder_emptyOrderWithValidPayment_returnsZeroAndMarksPaid() {
-        Order order = new Order();
-
-        double total = orderService.processOrder(order, null, "card");
-
-        assertEquals(0.0, total, EPSILON);
-        assertEquals(OrderStatus.PAID, order.getStatus());
-    }
+       assertEquals(0.0, total, EPSILON);
+       assertEquals(OrderStatus.PAID, order.getStatus());
+   }
 
     private static Order createSampleOrder() {
         Order order = new Order();

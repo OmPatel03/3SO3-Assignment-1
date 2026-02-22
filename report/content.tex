@@ -268,3 +268,45 @@ Hardest element to manage:
 \end{itemize}
 
 Overall, this exercise showed the TDD cycle clearly across two iterations: start with minimal behaviour, then expand the contract with edge cases and update implementation accordingly.
+
+\section{Task 5:  Test coverage and AI}
+
+\subsection{a)}
+
+I queried Gen AI with this prompt to generate a reasonable amount of test cases for the e-commerce order processing system:
+
+\textbf{``Generate a reasonable amount of JUnit test cases for all the classes within the given e-commerce order processing system''}
+
+With this prompt, I was able to generate an initial Jnit suite for the order-procesing classes. To measure coverage, I used Jacoco branch coverage and PIT mutation testing to get a mutation score. The generated tests achieved 88.89\% branch coverage and a mutation score of 94\%. The branch coverage indicates that most of the decision outcomes in the code were exercised by the tests, while the high mutation score indicates that the tests were effective at killing mutants, suggesting the test suite is good at catching faults.
+
+\subsection{b)}
+
+To drive the branch coverage past 90\% and the mutation score closer to 100\%, I worked in conjunction with generative AI to develop addition test cases.
+\\
+\\
+Since the AI was not good at finding what specific paths were not covered, the task fell on me (the human) to investigate the coverage report and find the missing paths that the tests were not covering. Once I found a missing path, I would prompt the AI to generate the test case(s) that would cover that path. I would then run the coverage report again and repeat the process until I was satisfied with the coverage and mutation score.\\
+\\
+It is clear that I (the human) played the role of investigating the coverage report and analyzing the code to find gaps in the test suite, while the AI played the role of generating the test cases once I found the problem areas. This back and forth process allowed me to both apply my understanding of the code and testing principles while leveraging the AI's ability to rapidly generate test cases with my guidance.
+\\
+\\
+It took me about 45 minutes to reach 100\$ branch coverage, and a mutation score of 97\%.
+
+\subsection{c)}
+
+My key takeaways from this exercise are that generative AI is a powerful tool for rapidly generating large amounts of code, including test cases, but fall short in identifying specific coverage gaps. 
+\\
+\\
+The tedious part of coding: writing the boilerplate, ensuring correct syntax, remembering certain methods or libraries, is done extremely quickly by AI and is usually correct. \emph{However}, the "engineering" part of software development: understanding the system, analyzing coverage reports, finding gaps in the test suite, and subsequently creating effective test cases to fill those gaps, still depends heavily on a human's understanding. This is where the strengths of AI and humans both differ and complement eachother. AI can handle generating large amounts of code quickly, but human cognition is needed to guide the process, analyze the coverage reports, and to show the AI where to focus its efforts.
+\\
+\\
+This exercise did a great job of showcasing that a human eye and human critical thinking is still needed when designing a test suite and reaching coverage goals, even when using state-of-the-art generative AI. 
+
+\subsection{d)}
+
+If I had \$1M to invest in the next generation of AI-enabled, human-in-the-loop testing tools, one of the top features of that tool would be an Always-on conversational testing copilot. It would work as a voice-enabled (or text) assistant that continuously monitors testing activities, coverage reports, and code changes. It would give instant feedback from code changes like (the change you just made in \emph{PaymentValidator} dropped your branch coverage from 100\% to 85\%, and could then take voice input on what to do next ("show me the new coverage report", "explain why the coverage dropped", "generate test cases that covers so and so path, etc). This would allow for a much more seamless experience when designing tests where the human acts as the "conductor" of the testing process, while the AI acts as the "copilot" which follows the human's lead and provides instant feedback. The AI would have to be able to process the voice input quickly and accurately which would likely take a big chunk of the investment, but the end result would be an extremely powerful tool that works akin to a super fast, always-on, pair programmer. 
+\\
+\\
+The biggest challenges of widespread adoption would almost certaintly be around trust. Many teams would not be willing to give an AI a high level of access to their codebase, much less trust it to execute their instructions around code changes and test generation correctly. Furthermore, since generative AI is still a black box, teams that work with software that controls critical systems (medical, aerospace, etc) would likely face regulatory hurdles around giving an AI access to a codebase that has real world consequences.
+\\
+\\
+Overcoming these challenges would likely require education about how the AI works, as well as strict access controls to ensure the AI cannot overstep its bounds and any changes it makes both requires human approval and are fully reversible.

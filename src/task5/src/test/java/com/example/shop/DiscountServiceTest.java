@@ -47,10 +47,10 @@ class DiscountServiceTest {
         assertEquals(70.0, blackFriday, EPSILON);
     }
 
-    @Test
-    void applyDiscount_invalidCode_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> discountService.applyDiscount(100.0, "INVALID"));
-    }
+   @Test
+   void applyDiscount_invalidCode_throwsIllegalArgumentException() {
+       assertThrows(IllegalArgumentException.class, () -> discountService.applyDiscount(100.0, "INVALID"));
+   }
 
     @Test
     void applyDiscount_unknownCode_returnsUnchangedSubtotal() {
