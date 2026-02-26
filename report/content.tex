@@ -152,367 +152,15 @@ The core engine should solely rely on:
 This allows testing the core module with deterministic, pre-scripted agent choices, so tests focus on legality checks and rule execution rather than RL quality. It also makes later replacement easy: random, heuristic, RL, or human-network agents can all plug in without changing core logic.
 
 \subsection{(b)}
-The following classes/interfaces would be implemented to achieve this design:
+A minimal implementation of the design is implemented in \texttt{src/catan}:
 \begin{itemize}
-    \item \texttt{CatanAgent.java}
-\begin{verbatim}
-package catan;
-
-import java.util.List;
-import java.util.Map;
-
-public interface CatanAgent {
-    void init(int playerId);
-
-    Move chooseInitialSettlement(GameState state);
-
-    Move chooseInitialRoad(GameState state);
-
-    Move chooseMove(GameState state);
-
-    Map<ResourceType, Integer> chooseDiscard(GameState state, int discardCount);
-
-    ResourceType chooseResource(GameState state);
-
-    int chooseRobberTarget(GameState state, List<Integer> possibleTargets);
-
-    DevelopmentCard chooseDevelopmentCard(GameState state);
-}
-
-\end{verbatim}
-
-    \item \texttt{AgentPolicy.java}
-\begin{verbatim}
-package catan;
-
-import java.util.List;
-import java.util.Map;
-
-public interface AgentPolicy {
-    Move chooseInitialSettlement(GameState state);
-
-    Move chooseInitialRoad(GameState state);
-
-    Move chooseMove(GameState state);
-
-    Map<ResourceType, Integer> chooseDiscard(GameState state, int discardCount);
-
-    ResourceType chooseResource(GameState state);
-
-    int chooseRobberTarget(GameState state, List<Integer> possibleTargets);
-
-    DevelopmentCard chooseDevelopmentCard(GameState state);
-}
-
-\end{verbatim}
-    \item \texttt{PolicyBackedCatanAgent.java}
-\begin{verbatim}
-package catan;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-public final class PolicyBackedCatanAgent implements CatanAgent {
-    private final AgentPolicy policy;
-    private int playerId;
-
-    public PolicyBackedCatanAgent(AgentPolicy policy) {
-        this.policy = Objects.requireNonNull(policy);
-        this.playerId = -1;
-    }
-
-    @Override
-    public void init(int playerId) {
-        this.playerId = playerId;
-    }
-
-    public int playerId() {
-        return playerId;
-    }
-
-    @Override
-    public Move chooseInitialSettlement(GameState state) {
-        return policy.chooseInitialSettlement(state);
-    }
-
-    @Override
-    public Move chooseInitialRoad(GameState state) {
-        return policy.chooseInitialRoad(state);
-    }
-
-    @Override
-    public Move chooseMove(GameState state) {
-        return policy.chooseMove(state);
-    }
-
-    @Override
-    public Map<ResourceType, Integer> chooseDiscard(GameState state, int discardCount) {
-        return policy.chooseDiscard(state, discardCount);
-    }
-
-    @Override
-    public ResourceType chooseResource(GameState state) {
-        return policy.chooseResource(state);
-    }
-
-    @Override
-    public int chooseRobberTarget(GameState state, List<Integer> possibleTargets) {
-        return policy.chooseRobberTarget(state, possibleTargets);
-    }
-
-    @Override
-    public DevelopmentCard chooseDevelopmentCard(GameState state) {
-        return policy.chooseDevelopmentCard(state);
-    }
-}
-
-\end{verbatim}
-
-    \item \texttt{ScriptedPolicy.java}
-\begin{verbatim}
-package catan;
-
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-
-public final class ScriptedPolicy implements AgentPolicy {
-    private final Queue<Move> scriptedMoves;
-
-    public ScriptedPolicy(List<Move> scriptedMoves) {
-        this.scriptedMoves = new ArrayDeque<>(scriptedMoves);
-    }
-
-    @Override
-    public Move chooseInitialSettlement(GameState state) {
-        return nextOrPass();
-    }
-
-    @Override
-    public Move chooseInitialRoad(GameState state) {
-        return nextOrPass();
-    }
-
-    @Override
-    public Move chooseMove(GameState state) {
-        return nextOrPass();
-    }
-
-    @Override
-    public Map<ResourceType, Integer> chooseDiscard(GameState state, int discardCount) {
-        return Collections.unmodifiableMap(new EnumMap<>(ResourceType.class));
-    }
-
-    @Override
-    public ResourceType chooseResource(GameState state) {
-        return ResourceType.BRICK;
-    }
-
-    @Override
-    public int chooseRobberTarget(GameState state, List<Integer> possibleTargets) {
-        return possibleTargets.isEmpty() ? -1 : possibleTargets.get(0);
-    }
-
-    @Override
-    public DevelopmentCard chooseDevelopmentCard(GameState state) {
-        return DevelopmentCard.KNIGHT;
-    }
-
-    private Move nextOrPass() {
-        return scriptedMoves.isEmpty() ? Move.of(MoveType.PASS) : scriptedMoves.remove();
-    }
-}
-
-\end{verbatim}
-
-    \item \texttt{CatanCoreEngine.java}
-\begin{verbatim}
-package catan;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-public final class CatanCoreEngine {
-    private final List<CatanAgent> agents;
-    private final Map<Integer, Integer> victoryPoints;
-    private int turn;
-
-    public CatanCoreEngine(List<CatanAgent> agents) {
-        if (agents.size() != 4) {
-            throw new IllegalArgumentException("Expected 4 agents");
-        }
-        this.agents = new ArrayList<>(agents);
-        this.victoryPoints = Map.of(0, 0, 1, 0, 2, 0, 3, 0);
-        this.turn = 0;
-
-        for (int i = 0; i < this.agents.size(); i++) {
-            this.agents.get(i).init(i);
-        }
-    }
-
-    public Move runSingleTurn() {
-        int currentPlayer = turn % agents.size();
-        Set<MoveType> legalThisTurn = Set.of(MoveType.PASS, MoveType.BUILD_ROAD, MoveType.OFFER_TRADE);
-        GameState state = new GameState(turn, currentPlayer, legalThisTurn, victoryPoints);
-
-        CatanAgent agent = agents.get(currentPlayer);
-        Move chosen = agent.chooseMove(state);
-
-        Move applied = state.isLegal(chosen) ? chosen : Move.of(MoveType.PASS, "illegal->pass");
-        turn++;
-        return applied;
-    }
-}
-
-\end{verbatim}
-
-    \item \texttt{GameState.java}
-\begin{verbatim}
-package catan;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-public final class GameState {
-    private final int turn;
-    private final int currentPlayerId;
-    private final Set<MoveType> legalMoveTypes;
-    private final Map<Integer, Integer> victoryPoints;
-
-    public GameState(int turn, int currentPlayerId, Set<MoveType> legalMoveTypes, Map<Integer, Integer> victoryPoints) {
-        this.turn = turn;
-        this.currentPlayerId = currentPlayerId;
-        this.legalMoveTypes = Set.copyOf(legalMoveTypes);
-        this.victoryPoints = Map.copyOf(victoryPoints);
-    }
-
-    public int turn() {
-        return turn;
-    }
-
-    public int currentPlayerId() {
-        return currentPlayerId;
-    }
-
-    public Set<MoveType> legalMoveTypes() {
-        return Collections.unmodifiableSet(legalMoveTypes);
-    }
-
-    public Map<Integer, Integer> victoryPoints() {
-        return Collections.unmodifiableMap(victoryPoints);
-    }
-
-    public boolean isLegal(Move move) {
-        return legalMoveTypes.contains(move.type());
-    }
-
-    public List<Integer> possibleRobberTargets() {
-        return victoryPoints.keySet().stream()
-                .filter(id -> id != currentPlayerId)
-                .toList();
-    }
-}
-
-\end{verbatim}
-
-    \item \texttt{Move.java}
-\begin{verbatim}
-package catan;
-
-import java.util.Objects;
-
-public final class Move {
-    private final MoveType type;
-    private final String payload;
-
-    private Move(MoveType type, String payload) {
-        this.type = Objects.requireNonNull(type);
-        this.payload = payload == null ? "" : payload;
-    }
-
-    public static Move of(MoveType type) {
-        return new Move(type, "");
-    }
-
-    public static Move of(MoveType type, String payload) {
-        return new Move(type, payload);
-    }
-
-    public MoveType type() {
-        return type;
-    }
-
-    public String payload() {
-        return payload;
-    }
-
-    @Override
-    public String toString() {
-        return type + (payload.isEmpty() ? "" : "(" + payload + ")");
-    }
-}
-
-\end{verbatim}
-
-    \item \texttt{MoveType.java}
-\begin{verbatim}
-package catan;
-
-public enum MoveType {
-    PASS,
-    BUILD_ROAD,
-    BUILD_SETTLEMENT,
-    BUILD_CITY,
-    OFFER_TRADE,
-    ACCEPT_TRADE,
-    REFUSE_TRADE,
-    COUNTER_TRADE,
-    PLAY_DEVELOPMENT,
-    MOVE_ROBBER
-}
-
-\end{verbatim}
-
-    \item \texttt{Demo.java}
-\begin{verbatim}
-package catan;
-
-import java.util.List;
-
-public final class Demo {
-    private Demo() {
-    }
-
-    public static void main(String[] args) {
-        CatanAgent a0 = new PolicyBackedCatanAgent(new ScriptedPolicy(List.of(
-                Move.of(MoveType.BUILD_ROAD, "edge-3")
-        )));
-        CatanAgent a1 = new PolicyBackedCatanAgent(new ScriptedPolicy(List.of(
-                Move.of(MoveType.BUILD_CITY, "v-11")
-        )));
-        CatanAgent a2 = new PolicyBackedCatanAgent(new ScriptedPolicy(List.of(
-                Move.of(MoveType.OFFER_TRADE, "2 wool for 1 ore")
-        )));
-        CatanAgent a3 = new PolicyBackedCatanAgent(new ScriptedPolicy(List.of()));
-
-        CatanCoreEngine engine = new CatanCoreEngine(List.of(a0, a1, a2, a3));
-
-        for (int i = 0; i < 6; i++) {
-            Move move = engine.runSingleTurn();
-            System.out.println("Turn " + i + ": " + move);
-        }
-    }
-}
-
-\end{verbatim}
+    \item \texttt{CatanAgent.java}: given interface (core dependency boundary).
+    \item \texttt{AgentPolicy.java}: behavior strategy abstraction used for composition.
+    \item \texttt{PolicyBackedCatanAgent.java}: adapter that implements \texttt{CatanAgent} by delegating to an injected policy.
+    \item \texttt{ScriptedPolicy.java}: deterministic test double with queued moves.
+    \item \texttt{CatanCoreEngine.java}: core loop; validates move legality and applies a safe fallback (\texttt{PASS}) if illegal.
+    \item \texttt{GameState.java}, \texttt{Move.java}, enums: minimal domain model.
+    \item \texttt{Demo.java}: runs four agents to show separation in practice.
 \end{itemize}
 
 Key point: the engine never knows whether a move came from a stub, heuristic, or RL policy. That behavior is injected.
@@ -558,63 +206,13 @@ With respect to the CEAB engineering practice: this reflects disciplined design,
 The following small initial unit test suite for \texttt{divide()} can be used to verify basic functionality and sign semantics:
 \begin{itemize}
     \item \texttt{testDividePositiveNumbers}: verifies normal behaviour (\texttt{5.0 / 2.0 = 2.5})
-    \begin{verbatim}
-private static void testDividePositiveNumbers(Calculator calculator) {
-assertDoubleEquals(2.5, calculator.divide(5.0, 2.0), 1e-9,
-        "Expected 5.0 / 2.0 to be 2.5");
-}
-
-    \end{verbatim}
     \item \texttt{testDivideNegativeByPositive}: verifies sign semantics (\texttt{-9.0 / 3.0 = -3.0})
-    \begin{verbatim}
-private static void testDivideNegativeByPositive(Calculator calculator) {
-        assertDoubleEquals(-3.0, calculator.divide(-9.0, 3.0), 1e-9,
-                "Expected -9.0 / 3.0 to be -3.0");
-    }
-    \end{verbatim}
-
 \end{itemize}
 
-The following helper methods should also be implemented to support the tests:
-\begin{verbatim}
-private static void assertDoubleEquals(double expected, double actual, double tolerance, String message) {
-    if (Math.abs(expected - actual) > tolerance) {
-        throw new AssertionError(message + ", got " + actual);
-    }
-}
-
-private static void assertThrows(Class<? extends Throwable> expectedException,
-                                    ThrowingRunnable action,
-                                    String message) {
-    try {
-        action.run();
-        throw new AssertionError(message + ", but no exception was thrown");
-    } catch (Throwable t) {
-        if (!expectedException.isInstance(t)) {
-            throw new AssertionError(message + ", got " + t.getClass().getSimpleName());
-        }
-    }
-}
-
-@FunctionalInterface
-private interface ThrowingRunnable {
-    void run() throws Throwable;
-}
-\end{verbatim}
-
-These tests define the first iteration's target behaviour before implementing full edge-case handling.
+These tests are implemented in \texttt{src/calculator/CalculatorTddTest.java}. They define the first iteration's target behaviour before implementing full edge-case handling.
 
 \subsection{(b)}
-The basic functionality can be implemented as follows to make the aforementioned tests pass:
-\begin{verbatim}
-package calculator;
-
-public final class Calculator {
-    public double divide(double numerator, double denominator) {
-        return numerator / denominator;
-    }
-}
-\end{verbatim}
+The basic functionality has been implemented in \texttt{src/calculator/Calculator.java} until the tests passed:
 \begin{itemize}
     \item method \texttt{divide(double numerator, double denominator)}
     \item returns \texttt{numerator / denominator} for valid normal inputs
@@ -638,57 +236,21 @@ TDD made this visible quickly: once minimal tests pass, the next step is to iden
 The test suite was then expanded by adding a second TDD iteration focused on edge cases:
 \begin{itemize}
     \item \texttt{testDivideByZeroThrows}: expects \texttt{ArithmeticException} for denominator \texttt{0.0}
-    \begin{verbatim}
-private static void testDivideByZeroThrows(Calculator calculator) {
-        assertThrows(ArithmeticException.class,
-                () -> calculator.divide(10.0, 0.0),
-                "Expected division by +0.0 to throw ArithmeticException");
-    }
-    \end{verbatim}
     \item \texttt{testDivideNegativeZeroThrows}: expects \texttt{ArithmeticException} for denominator \texttt{-0.0}
-    \begin{verbatim}
-private static void testDivideNegativeZeroThrows(Calculator calculator) {
-    assertThrows(ArithmeticException.class,
-            () -> calculator.divide(10.0, -0.0),
-            "Expected division by -0.0 to throw ArithmeticException");
-}
-    \end{verbatim}
     \item \texttt{testDivideNaNThrows}: expects \texttt{IllegalArgumentException} if an argument is \texttt{NaN}
-    \begin{verbatim}
-private static void testDivideNaNThrows(Calculator calculator) {
-        assertThrows(IllegalArgumentException.class,
-                () -> calculator.divide(Double.NaN, 2.0),
-                "Expected NaN input to throw IllegalArgumentException");
-    }
-    \end{verbatim}
 \end{itemize}
 
-These tests extend the contract from ``works on normal numbers'' to ``fails safely on invalid input.''
+These tests are also in \texttt{src/calculator/CalculatorTddTest.java}. They extend the contract from ``works on normal numbers'' to ``fails safely on invalid input.''
 
 \subsection{(e)}
-The \texttt{divide()} method can then be updated to satisfy the expanded suite in the following way:
-\begin{verbatim}
-package calculator;
-
-public final class Calculator {
-    public double divide(double numerator, double denominator) {
-        if (Double.isNaN(numerator) || Double.isNaN(denominator)) {
-            throw new IllegalArgumentException("NaN is not supported");
-        }
-
-        if (denominator == 0.0) {
-            throw new ArithmeticException("Cannot divide by zero");
-        }
-
-        return numerator / denominator;
-    }
-}
-\end{verbatim}
+The \texttt{divide()} method was then updated to satisfy the expanded suite:
 \begin{itemize}
     \item validate inputs and reject \texttt{NaN} with \texttt{IllegalArgumentException}
     \item reject zero denominator (including \texttt{-0.0}) with \texttt{ArithmeticException}
     \item keep normal arithmetic behaviour unchanged
 \end{itemize}
+
+This final behaviour is implemented in \texttt{src/calculator/Calculator.java}.
 
 \subsection{(f)}
 I would use TDD in contexts where correctness and regression safety are important: utility/domain logic, business rules, parsers, and modules with clear input/output contracts.
