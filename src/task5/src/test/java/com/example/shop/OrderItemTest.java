@@ -24,12 +24,12 @@ class OrderItemTest {
         assertThrows(IllegalArgumentException.class, () -> new OrderItem("Item", 1, -0.01));
     }
 
-   @Test
-   void constructor_allowsZeroUnitPrice() {
-       OrderItem item = new OrderItem("Freebie", 2, 0.0);
-
-       assertEquals(0.0, item.getTotalPrice(), EPSILON);
-   }
+//    @Test
+//    void constructor_allowsZeroUnitPrice() {
+//        OrderItem item = new OrderItem("Freebie", 2, 0.0);
+//
+//        assertEquals(0.0, item.getTotalPrice(), EPSILON);
+//    }
 
     @Test
     void getTotalPrice_returnsQuantityTimesUnitPrice() {

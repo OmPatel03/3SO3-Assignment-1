@@ -382,7 +382,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@511da44f_19'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>processOrder<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_emptyOrderWithValidPayment_returnsZeroAndMarksPaid()]</span></span> removed call to com/example/shop/Order::setStatus &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>processOrder<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()]</span></span> removed call to com/example/shop/Order::setStatus &rarr; KILLED</p> 
 </td>
 </tr>
 <tr>
@@ -392,7 +392,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@511da44f_20'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>processOrder<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()]</span></span> replaced double return with 0.0d for com/example/shop/OrderService::processOrder &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>processOrder<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()]</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>processOrder<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()]</span></span> replaced double return with 0.0d for com/example/shop/OrderService::processOrder &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>processOrder<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()]</span></span> Replaced double addition with subtraction &rarr; KILLED</p> 
 </td>
 </tr>
 
@@ -417,7 +417,7 @@
 
 <h2>Tests examined</h2>
 <ul>
-<li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_nullPayment_returnsZeroAndCancelsOrder()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_cryptoPayment_returnsZeroAndCancelsOrder()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_emptyOrderWithValidPayment_returnsZeroAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_invalidDiscount_throwsAndOrderRemainsCreated()] (0 ms)</li>
+<li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_nullPayment_returnsZeroAndCancelsOrder()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_cryptoPayment_returnsZeroAndCancelsOrder()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (1 ms)</li>
 </ul>
 
 <br/>

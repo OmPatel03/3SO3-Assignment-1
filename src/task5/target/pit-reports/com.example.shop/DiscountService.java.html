@@ -250,7 +250,7 @@
 
 
 <tr>
-<td class='covered'>
+<td class='uncovered'>
 <a name='org.pitest.mutationtest.report.html.SourceFile@3dec3f87_16'/>
 16
 </td>
@@ -261,7 +261,7 @@
 </span>
 </span>
 </td>
-<td class='covered'><pre><span  class=''>                throw new IllegalArgumentException(&#34;Invalid discount code&#34;);</span></pre></td></tr>
+<td class='uncovered'><pre><span  class=''>                throw new IllegalArgumentException(&#34;Invalid discount code&#34;);</span></pre></td></tr>
 
 
 <tr>
@@ -351,7 +351,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@3dec3f87_6'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blackFriday_returnsThirtyPercentOff()]</span></span> negated conditional &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_nullCode_returnsUnchangedSubtotal()]</span></span> negated conditional &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_caseInsensitiveCodeHandling_works()]</span></span> negated conditional &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_nullCode_returnsUnchangedSubtotal()]</span></span> negated conditional &rarr; KILLED</p> 
 </td>
 </tr>
 <tr>
@@ -381,7 +381,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@3dec3f87_14'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blackFriday_returnsThirtyPercentOff()]</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blackFriday_returnsThirtyPercentOff()]</span></span> replaced double return with 0.0d for com/example/shop/DiscountService::applyDiscount &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_caseInsensitiveCodeHandling_works()]</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>applyDiscount<br/><b>Killed by : </b>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_caseInsensitiveCodeHandling_works()]</span></span> replaced double return with 0.0d for com/example/shop/DiscountService::applyDiscount &rarr; KILLED</p> 
 </td>
 </tr>
 <tr>
@@ -416,7 +416,7 @@
 
 <h2>Tests examined</h2>
 <ul>
-<li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blackFriday_returnsThirtyPercentOff()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_caseInsensitiveCodeHandling_works()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blankCode_returnsUnchangedSubtotal()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_nullCode_returnsUnchangedSubtotal()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_emptyOrderWithValidPayment_returnsZeroAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_student10_returnsTenPercentOff()] (9 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_unknownCode_returnsUnchangedSubtotal()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_invalidCode_throwsIllegalArgumentException()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_invalidDiscount_throwsAndOrderRemainsCreated()] (0 ms)</li>
+<li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_caseInsensitiveCodeHandling_works()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blackFriday_returnsThirtyPercentOff()] (1 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_blankCode_returnsUnchangedSubtotal()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_nullCode_returnsUnchangedSubtotal()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_student10_returnsTenPercentOff()] (11 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (1 ms)</li><li>com.example.shop.DiscountServiceTest.[engine:junit-jupiter]/[class:com.example.shop.DiscountServiceTest]/[method:applyDiscount_unknownCode_returnsUnchangedSubtotal()] (0 ms)</li>
 </ul>
 
 <br/>

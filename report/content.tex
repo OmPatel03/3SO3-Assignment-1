@@ -711,6 +711,21 @@ Overall, this exercise showed the TDD cycle clearly across two iterations: start
 
 \subsection{a)}
 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/88_branch_coverage.png}
+    \caption{Branch Coverage Report}
+    \label{fig:coverage_report}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/94_mutation_coverage.png}
+    \caption{Mutation Testing Report}
+    \label{fig:mutation_report}
+\end{figure}
+
 I queried Gen AI with this prompt to generate a reasonable amount of test cases for the e-commerce order processing system:
 
 \textbf{``Generate a reasonable amount of JUnit test cases for all the classes within the given e-commerce order processing system''}
@@ -718,6 +733,20 @@ I queried Gen AI with this prompt to generate a reasonable amount of test cases 
 With this prompt, I was able to generate an initial Jnit suite for the order-procesing classes. To measure coverage, I used Jacoco branch coverage and PIT mutation testing to get a mutation score. The generated tests achieved 88.89\% branch coverage and a mutation score of 94\%. The branch coverage indicates that most of the decision outcomes in the code were exercised by the tests, while the high mutation score indicates that the tests were effective at killing mutants, suggesting the test suite is good at catching faults.
 
 \subsection{b)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/100_branch_coverage.png}
+    \caption{Branch Coverage Report}
+    \label{fig:coverage_report}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/97_mutation_coverage.png}
+    \caption{Mutation Testing Report}
+    \label{fig:mutation_report}
+\end{figure}
 
 To drive the branch coverage past 90\% and the mutation score closer to 100\%, I worked in conjunction with generative AI to develop addition test cases.
 \\

@@ -217,17 +217,17 @@
 <a name='org.pitest.mutationtest.report.html.SourceFile@756808cc_14'/>
 14
 </td>
-<td class='killed'>
+<td class='survived'>
 <span class='pop'>
 <a href='#grouporg.pitest.mutationtest.report.html.SourceFile@756808cc_14'>2</a>
 <span>
-1. calculateTax : negated conditional &rarr; KILLED<br/>
-2. calculateTax : changed conditional boundary &rarr; KILLED<br/>
+1. calculateTax : changed conditional boundary &rarr; SURVIVED<br/>
+2. calculateTax : negated conditional &rarr; KILLED<br/>
 
 </span>
 </span>
 </td>
-<td class='covered'><pre><span  class='killed'>        if (subtotal &#60; 0) {</span></pre></td></tr>
+<td class='covered'><pre><span  class='survived'>        if (subtotal &#60; 0) {</span></pre></td></tr>
 
 
 <tr>
@@ -293,7 +293,7 @@
 
 
 <tr>
-<td class='covered'>
+<td class='uncovered'>
 <a name='org.pitest.mutationtest.report.html.SourceFile@756808cc_19'/>
 19
 </td>
@@ -304,7 +304,7 @@
 </span>
 </span>
 </td>
-<td class='covered'><pre><span  class=''>            return 0;</span></pre></td></tr>
+<td class='uncovered'><pre><span  class=''>            return 0;</span></pre></td></tr>
 
 
 <tr>
@@ -415,7 +415,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@756808cc_14'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_negativeSubtotal_throwsIllegalArgumentException()]</span></span> negated conditional &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_zeroSubtotal_returnsZero()]</span></span> changed conditional boundary &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_negativeSubtotal_throwsIllegalArgumentException()]</span></span> negated conditional &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> 
 </td>
 </tr>
 <tr>
@@ -425,7 +425,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@756808cc_18'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_positiveSubtotal_returnsTwentyPercent()]</span></span> negated conditional &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()]</span></span> negated conditional &rarr; KILLED</p> 
 </td>
 </tr>
 <tr>
@@ -435,7 +435,7 @@
 
 <a name='grouporg.pitest.mutationtest.report.html.SourceFile@756808cc_22'/> 
 
-<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_positiveSubtotal_returnsTwentyPercent()]</span></span> replaced double return with 0.0d for com/example/shop/PricingService::calculateTax &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_positiveSubtotal_returnsTwentyPercent()]</span></span> Replaced double multiplication with division &rarr; KILLED</p> 
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()]</span></span> replaced double return with 0.0d for com/example/shop/PricingService::calculateTax &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>calculateTax<br/><b>Killed by : </b>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()]</span></span> Replaced double multiplication with division &rarr; KILLED</p> 
 </td>
 </tr>
 
@@ -460,7 +460,7 @@
 
 <h2>Tests examined</h2>
 <ul>
-<li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_positiveSubtotal_returnsTwentyPercent()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_blackFridayDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_negativeSubtotal_throwsIllegalArgumentException()] (0 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_zeroSubtotal_returnsZero()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_emptyOrderWithValidPayment_returnsZeroAndMarksPaid()] (0 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateSubtotal_multipleItems_returnsSum()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_invalidDiscount_throwsAndOrderRemainsCreated()] (0 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateSubtotal_emptyOrder_returnsZero()] (0 ms)</li>
+<li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_validNoDiscount_returnsSubtotalPlusTaxAndMarksPaid()] (0 ms)</li><li>com.example.shop.OrderServiceTest.[engine:junit-jupiter]/[class:com.example.shop.OrderServiceTest]/[method:processOrder_studentDiscount_returnsDiscountedTotalPlusTaxAndMarksPaid()] (1 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateTax_negativeSubtotal_throwsIllegalArgumentException()] (0 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateSubtotal_multipleItems_returnsSum()] (0 ms)</li><li>com.example.shop.PricingServiceTest.[engine:junit-jupiter]/[class:com.example.shop.PricingServiceTest]/[method:calculateSubtotal_emptyOrder_returnsZero()] (0 ms)</li>
 </ul>
 
 <br/>

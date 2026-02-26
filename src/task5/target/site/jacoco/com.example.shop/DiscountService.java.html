@@ -7,13 +7,13 @@
 <span class="fc" id="L7">            return subtotal;</span>
         }
 
-<span class="fc bfc" id="L10" title="All 4 branches covered.">        switch (discountCode.toUpperCase()) {</span>
+<span class="pc bpc" id="L10" title="1 of 4 branches missed.">        switch (discountCode.toUpperCase()) {</span>
             case &quot;STUDENT10&quot;:
 <span class="fc" id="L12">                return subtotal * 0.9;</span>
             case &quot;BLACKFRIDAY&quot;:
 <span class="fc" id="L14">                return subtotal * 0.7;</span>
             case &quot;INVALID&quot;:
-<span class="fc" id="L16">                throw new IllegalArgumentException(&quot;Invalid discount code&quot;);</span>
+<span class="nc" id="L16">                throw new IllegalArgumentException(&quot;Invalid discount code&quot;);</span>
             default:
 <span class="fc" id="L18">                return subtotal;</span>
         }
